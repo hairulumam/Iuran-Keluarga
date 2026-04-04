@@ -291,7 +291,7 @@ const PERIODS = [
 ];
 const MN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'];
 const MEMBERS = [
-  {id:1, name:'Hj Sulaiha',    prev:685000},
+  {id:1, name:'Hj Sulaiha',    prev:0},
   {id:2, name:'H Zubaidi',     prev:2935000},
   {id:3, name:'Farida',        prev:1435000},
   {id:4, name:'Fathor Rasyid', prev:0},
@@ -344,14 +344,15 @@ async function loadFromSheet() {
   render();
 }
 
+// ── FIX CORS: Hapus header Content-Type, kirim body langsung tanpa header tambahan ──
 async function saveToSheet() {
   showSaveBar('saving');
   try {
     const body = JSON.stringify({payments, logs});
     await fetch(SHEET_URL, {
       method: 'POST',
-      body,
-      headers: {'Content-Type': 'text/plain'}
+      body: body
+      // Tidak ada headers — ini mencegah browser trigger CORS preflight ke Google Apps Script
     });
     showSaveBar('saved');
     hideError();
